@@ -31,7 +31,7 @@ Mathematica, MATLAB e Simulink.
 
 ## Software
 
-- **Wolfram Mathematica 14** — apre i notebook `.nb`. I file `.wl` sono lo stesso
+- **Wolfram Mathematica 14** - apre i notebook `.nb`. I file `.wl` sono lo stesso
   codice in formato testo (leggibile anche senza Mathematica) con commenti aggiuntivi.
-- **MATLAB + Simulink** — `ParametriMarkov.mlx` definisce la matrice di transizione e
+- **MATLAB + Simulink** - `ParametriMarkov.mlx` definisce la matrice di transizione e
   lo stato iniziale; `Simulink2a.slx` itera `x(k+1) = A x(k)` fino alla convergenza.
