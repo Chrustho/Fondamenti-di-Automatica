@@ -1,4 +1,4 @@
-# Progetto di Fondamenti di Automatica — Traccia 28
+# Progetto di Fondamenti di Automatica - Traccia 28
 
 Progetto d'esame per il corso di Fondamenti di Automatica, anno accademico 2023/2024.
 Autore: **Bruni Christian** - matricola 240008.
