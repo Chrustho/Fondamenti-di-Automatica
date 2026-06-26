@@ -7,8 +7,8 @@
    Sistema:  x(k+1) = A x(k) + B u(k)
              y(k)   = C x(k)
 
-   Differenza chiave rispetto all'Esercizio A: qui A NON e'
-   diagonalizzabile. L'autovalore -1/5 ha molteplicita' algebrica 3 ma
+   Differenza chiave rispetto all'Esercizio A: qui A NON è
+   diagonalizzabile. L'autovalore -1/5 ha molteplicità algebrica 3 ma
    geometrica 1, quindi JordanDecomposition restituisce un unico blocco
    di Jordan 3x3. I modi naturali a tempo discreto hanno la forma
    binomiale  C(k,j) lambda^(k-j),  da cui i termini Binomial[k,j].
@@ -28,7 +28,7 @@
 (* ===== Analisi Sistema LTI-TD ===== *)
 ClearAll["Global`*"]
 
-A={{-92/125, -107/125, -43/50}, {217/125, -18/125, -7/50}, 
+A={{-92/125, -107/125, -43/50}, {217/125, -18/125, -7/50},
  {-184/125, 36/125, 7/25}};
 
 B={{-1/2}, {1/2}, {-1}};
@@ -39,7 +39,7 @@ C1= {{9/4, -7/4, -2}};
 (* ===== Calcolo gli autovalori ===== *)
 \[Lambda]= Eigenvalues[A]
 
-(* A non e' diagonalizzabile: JordanDecomposition restituisce T (cambio
+(* A non è diagonalizzabile: JordanDecomposition restituisce T (cambio
    base) e Lambda con l'unico blocco di Jordan 3x3 associato a -1/5.
    I tre DiscretePlot sotto mostrano i modi binomiali del blocco:
    lambda^k, C(k,1) lambda^(k-1), C(k,2) lambda^(k-2). *)
@@ -243,4 +243,3 @@ Ob = {{C1}[[1,1]],{C1.A}[[1,1]],{C1.A.A}[[1,1]]}
 y0= {{(125)/(96)},{(125)/(96)},{-(67)/(96)}}
 
 x0= Inverse[Ob].y0
-

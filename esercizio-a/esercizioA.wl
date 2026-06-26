@@ -19,7 +19,7 @@
      9.  risposta all'ingresso 1(-t)
 
    Nota: i blocchi 2x2 nella forma canonica derivano dalla coppia di
-   autovalori complessi coniugati; A resta diagonalizzabile perche'
+   autovalori complessi coniugati; A resta diagonalizzabile perché
    per ogni autovalore m.a. = m.g.
    ===================================================================== *)
 
@@ -28,7 +28,7 @@
 (* ===== Analisi Sistema LTI-TC ===== *)
 ClearAll["Global`*"]
 
-A = {{-179/4, -331/4, 205/8, -409/8}, {183/4, 327/4, -213/8, 409/8}, 
+A = {{-179/4, -331/4, 205/8, -409/8}, {183/4, 327/4, -213/8, 409/8},
       {-179/2, -331/2, 205/4, -413/4}, {-179/2, -327/2, 209/4, -409/4}};
 
 B= {{-1/2}, {1/2}, {-1}, {-1}};
@@ -50,7 +50,7 @@ Plot[Exp[Re[\[Lambda][[4]]]t]Sin[Im[\[Lambda][[4]]]t],{t,0,4},PlotRange->All]
 T0=Transpose[Eigenvectors[A]]
 
 (* Matrice di cambio base "ibrida": per la coppia complessa coniugata
-   uso parte reale e immaginaria di UN solo autovettore, cosi' T resta
+   uso parte reale e immaginaria di UN solo autovettore, così T resta
    reale e Lambda assume la forma di Jordan reale (blocco 2x2). *)
 T=Transpose[{T0[[All,1]],T0[[All,2]],Re[T0[[All,3]]],Im[T0[[All,4]]]}]
 
@@ -90,7 +90,7 @@ T //MatrixForm
 
 
 (* ===== Tramite l\[CloseCurlyQuote]analisi della combinazione lineare delle colonne associate agli autovalori reali, ottengo ===== *)
-(* Idea della selezione dei modi: la risposta libera e' combinazione
+(* Idea della selezione dei modi: la risposta libera è combinazione
    lineare delle colonne di T pesate da z0. Scegliendo x0 come somma
    delle SOLE colonne dei modi che voglio "accendere", le restanti
    componenti di z0 si annullano e quei modi non compaiono. *)
@@ -197,7 +197,7 @@ Apart[Y[s]]
 
 (* ===== Trovo il valore delle C, tramite la formula di Heaviside ===== *)
 (* Ogni residuo si ottiene col limite (s - p_i) Y(s) per s->p_i.
-   C1 e' legato al polo s=0 introdotto dal gradino: e' la componente
+   C1 è legato al polo s=0 introdotto dal gradino: è la componente
    di REGIME. I residui sui poli del sistema danno il TRANSITORIO.
    Per la coppia complessa basta C4: C5 = Conjugate[C4]. *)
 Subscript[C, 1]=Underscript[\[Limit], s\[Rule]0](s) Y[s][[1,1]]
@@ -307,7 +307,7 @@ Plot[{Subscript[y, trsin][t],Subscript[y, ssin][t],Subscript[y, ssin][t]+Subscri
 Subscript[x, 0]={{-3},{2},{-3},{3}};
 
 (* Le condizioni iniziali del modello ARMA (y, y', y'', y''' in 0) sono
-   legate allo stato iniziale dalla matrice di osservabilita':
+   legate allo stato iniziale dalla matrice di osservabilità:
    [y(0); y'(0); ...] = Ob . x0, con Ob = [C; C A; C A^2; C A^3]. *)
 Ob={C1[[1]],C1[[1]].A,C1[[1]].A.A,C1[[1]].A.A.A}
 
@@ -408,4 +408,3 @@ yliberat=Subscript[H, 1]Exp[-3 t]+Subscript[H, 2]Exp[-7 t]+2 Exp[-2 t]*ComplexEx
 y[t_]:={{\[Piecewise], {{yNeg, t<0}, {yliberat, t>=0}}}}
 
 Plot[y[t],{t,-5,5},PlotRange->All]
-
