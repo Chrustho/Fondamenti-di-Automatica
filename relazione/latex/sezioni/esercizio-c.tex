@@ -1,0 +1,69 @@
+\section{Esercizio C -- Catena di Markov a tempo discreto}
+
+La catena è descritta da $x(k+1)=Ax(k)$ con matrice di transizione
+\[
+A=\begin{bmatrix}
+\tfrac15 & \tfrac{5}{19} & \tfrac{3}{11}\\[3pt]
+\tfrac13 & \tfrac{9}{19} & \tfrac{7}{22}\\[3pt]
+\tfrac{7}{15} & \tfrac{5}{19} & \tfrac{9}{22}
+\end{bmatrix}.
+\]
+
+\subsection{Grafo di transizione}
+La catena di Markov è un modello di transizione che usa l'\emph{ipotesi di Markov}: la
+probabilità di un evento dipende solo dallo stato attuale e non dalla storia passata. Le
+variabili di stato rappresentano probabilità, quindi la matrice è \emph{stocastica per
+colonna} (la somma di ogni colonna vale $1$).
+
+Dalla matrice si ricava il grafo di transizione: tanti nodi quanti gli stati, tanti archi
+quanti gli elementi non nulli della matrice. L'elemento $A[i,j]$ è la probabilità di
+trovarsi nello stato $i$ provenendo dallo stato $j$; gli elementi diagonali $A[i,i]$ sono
+quindi autoanelli (probabilità di restare nello stato $i$).
+
+\mmacap[0.55]{img-144}{Grafo di transizione della catena (autoanelli sulla diagonale)}
+
+\subsection{Stato stazionario}
+\paragraph{Ricorsione numerica.}
+Si parte da uno stato iniziale stocastico scelto in modo pseudo-casuale. In MATLAB si
+definisce la matrice e si genera $x_0$ con \texttt{rand(3,1)}; per renderlo stocastico lo
+si divide per la somma dei suoi elementi, verificando con \texttt{sum} che valga $1$.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.32\linewidth]{img-147}
+\caption*{\itshape $x_0$ alla creazione non è stocastico; dopo $x_0=x_0/\mathrm{sum}(x_0)$ la somma vale $1$.}
+\end{figure}
+
+Un semplice modello Simulink simula la stazionarietà della catena: un blocco
+\emph{Unit Delay} (registro) restituisce in uscita il proprio ingresso con un passo di
+ritardo (al primo passo l'ingresso è $x_0$); uno \emph{Scope} ne registra l'andamento, un
+\emph{Display} mostra il valore corrente e un blocco \emph{Gain} moltiplica ad ogni passo
+l'uscita del registro per la matrice $A$, generando il prossimo ingresso.
+
+\mmacap[0.75]{img-148}{Modello Simulink della ricorsione $x(k+1)=A\,x(k)$}
+
+Dopo circa cinque passi la catena converge ai valori mostrati dal \emph{Display}.
+
+\mmacap[0.3]{img-149}{Andamento sullo Scope: convergenza della catena}
+
+\paragraph{Calcolo in forma chiusa.}
+Il risultato si dimostra rigorosamente cercando l'equilibrio stocastico $\Pi=A\Pi$. Se la
+matrice $I-A$ è singolare esiste un vettore non nullo $\Pi$ che la soddisfa; per
+determinarlo univocamente si costruisce il sistema formato dalle righe di $I-A$ e dalla
+condizione di stato stocastico $\sum_i \Pi_i=1$. Risolvendo con \texttt{Solve} su
+Mathematica si ottiene
+\[
+\Pi=\begin{bmatrix}\tfrac{75}{299}&\tfrac{114}{299}&\tfrac{110}{299}\end{bmatrix}^{\!\top}
+\approx\begin{bmatrix}0{,}2508&0{,}3813&0{,}3679\end{bmatrix}^{\!\top},
+\]
+gli stessi valori mostrati dal \emph{Display} nella simulazione Simulink.
+
+\mma[0.45]{img-153}
+
+\subsection{Spanning tree}
+Uno \emph{spanning tree} (albero ricoprente) è un albero che ha per nodi tutti i nodi del
+grafo e un sottoinsieme dei suoi archi; essendo un albero è privo di cicli. Per il
+\emph{Graph tree Markov chain theorem}, se dal grafo si estrae un albero i cui nodi foglia
+sono gli elementi della catena e dal padre si raggiungono tutti i nodi foglia, allora
+quell'albero è ricoprente.
+
+\mmacap[0.4]{img-154}{Un possibile albero ricoprente della catena}

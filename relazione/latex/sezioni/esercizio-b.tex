@@ -1,0 +1,103 @@
+\section{Esercizio B -- Sistema LTI a tempo discreto}
+
+Il sistema è $x(k+1)=Ax(k)+Bu(k)$, $y(k)=Cx(k)$, SISO e proprio, con
+\[
+A=\begin{bmatrix}
+-\tfrac{92}{125} & -\tfrac{107}{125} & -\tfrac{43}{50}\\[2pt]
+\tfrac{217}{125} & -\tfrac{18}{125} & -\tfrac{7}{50}\\[2pt]
+-\tfrac{184}{125} & \tfrac{36}{125} & \tfrac{7}{25}
+\end{bmatrix},\quad
+B=\begin{bmatrix}-\tfrac12\\[2pt]\tfrac12\\[2pt]-1\end{bmatrix},\quad
+C=\begin{bmatrix}\tfrac94 & -\tfrac74 & -2\end{bmatrix}.
+\]
+
+\subsection{Modi naturali}
+Nei sistemi a tempo discreto i modi naturali sono successioni reali nella forma
+$\lambda_i^{\,k}$. La matrice $A$ ha l'unico autovalore $\lambda=-\tfrac15$ con
+molteplicità algebrica $3$ ma geometrica $1$: $A$ \emph{non} è diagonalizzabile.
+\texttt{JordanDecomposition} restituisce la matrice di cambio base $T$ e la forma
+canonica $\Lambda$ con un solo blocco di Jordan $3\times3$. I tre autovalori
+coincidenti generano modi di tipo binomiale, secondo
+\[
+\sum_{i=0}^{l-1}\binom{k}{i}\lambda^{\,k-i},
+\]
+cioè $\lambda^k$, $\binom{k}{1}\lambda^{k-1}$ e $\binom{k}{2}\lambda^{k-2}$.
+
+\mmacap[0.48]{img-084}{1\textordmasculine\ modo: $(-\tfrac15)^k$}
+\mmacap[0.48]{img-085}{2\textordmasculine\ modo: $\binom{k}{1}(-\tfrac15)^{k-1}$}
+\mmacap[0.48]{img-086}{3\textordmasculine\ modo: $\binom{k}{2}(-\tfrac15)^{k-2}$}
+
+\subsection{Risposta libera}
+La risposta libera sullo stato è $x(k)=A^k x_0$. Analogamente al caso continuo si cerca
+una matrice simile ad $A$ tramite $T$: con $\mathrm{MatrixPower}[\Lambda,k]$ si ottiene
+una matrice con, sulla diagonale, le potenze $k$-esime dei modi e, sulla triangolare
+superiore, le successioni polinomio-potenza. Quindi $x_l(k)=T\,\Lambda^k z_0$ con
+$z_0=T^{-1}x_0$, e $y_l(k)=C\,x_l(k)$. Lo stato iniziale è
+$x_0=\begin{bmatrix}0&0&-3\end{bmatrix}^{\!\top}$.
+
+\mmacap[0.48]{img-091}{Risposta libera sull'uscita $y_l[k]$}
+\mmacap[0.48]{img-092}{Risposta libera sullo stato e sull'uscita a confronto}
+
+\subsection{Attivazione di specifici modi naturali}
+Come nel caso continuo, scegliendo opportune combinazioni lineari delle colonne di $T$
+si attivano sulla risposta libera soltanto i modi desiderati.
+
+\mmacap[0.48]{img-094}{Modi legati alle ultime due colonne di $T$}
+\mmacap[0.48]{img-096}{Modi legati alla prima e all'ultima colonna}
+\mmacap[0.48]{img-098}{Solo prima colonna}
+\mmacap[0.48]{img-100}{Solo seconda colonna}
+\mmacap[0.5]{img-102}{Solo terza colonna}
+
+\subsection{Funzione di trasferimento, poli e zeri}
+La funzione di trasferimento è ora funzione della variabile complessa $z$:
+$Y(z)=G(z)U(z)$ con $G(z)=C(zI-A)^{-1}B+D$. Calcolata dalla definizione e normalizzata,
+coincide con quella prodotta da \texttt{StateSpaceModel}. I poli sono le radici del
+denominatore e, come sempre, sono un sottoinsieme degli autovalori: qui il polo triplo
+$z=-\tfrac15$. Lo zero (radice del numeratore) è $z=-\tfrac18$.
+
+\subsection{Risposta al gradino unitario}
+La risposta forzata al gradino è $Y_f(z)=G(z)\,U(z)$ con $\Ztr[1(k)]=\tfrac{z}{z-1}$.
+Si divide $Y_f(z)$ per $z$ per operare come nel tempo continuo e si scrivono i fratti
+semplici. Per il residuo legato al polo $z=1$ (componente di regime) basta la formula di
+Heaviside semplificata; per il polo triplo $z=-\tfrac15$ occorre quella generalizzata,
+con le derivate successive
+\[
+C_{2j}=\frac{1}{(3-j)!}\lim_{z\to-\frac15}\frac{d^{\,3-j}}{dz^{\,3-j}}
+\Big[(z+\tfrac15)^3\tfrac{Y_f(z)}{z}\Big].
+\]
+Antitrasformando (i modi binomiali danno i termini $\binom{k}{j}(-\tfrac15)^{k-j}$) si
+ottiene la risposta come somma di componente di regime e transitoria.
+
+\mmacap[0.7]{img-115}{Risposta al gradino con componenti $y_f[k]$, $y_{ss}[k]$, $y_{tr}[k]$}
+
+Si verifica che la differenza poli$-$zeri (pari a $2$) è rispettata.
+
+\subsection{Modello ARMA}
+Partendo da $G(z)=\tfrac{Y(z)}{U(z)}$ e dalla matrice di osservabilità si ricavano le
+condizioni iniziali sull'uscita compatibili con
+$x_0=\begin{bmatrix}0&-2&-3\end{bmatrix}^{\!\top}$. Uguagliando
+$\mathrm{den}(G)\,Y(z)=\mathrm{num}(G)\,U(z)$ e antitrasformando $z^nY(z)\to y(k+n)$ si
+ottiene l'equazione alle differenze; nel dominio $z$ si calcola la risposta del sistema
+e se ne isola la componente di risposta libera.
+
+\mma[0.85]{img-122}
+
+Confrontando la risposta libera dal modello ARMA con quella dalla definizione si verifica
+l'uguaglianza, a conferma della correttezza delle condizioni iniziali e quindi
+dell'equivalenza delle due rappresentazioni.
+
+\paragraph{Risposta all'ingresso a finestra.}
+L'ingresso vale $1$ per $0\le k\le10$ e $0$ altrove. Essendo di durata finita, la sua
+trasformata $\Ztr$ si scrive come somma di potenze $\sum_{k=0}^{10}z^{-k}$.
+Sostituendo questa trasformata e le condizioni iniziali nel modello I/U e
+antitrasformando si ottiene la risposta del sistema.
+
+\mmacap[0.48]{img-130}{Risposta totale all'ingresso a finestra}
+\mmacap[0.48]{img-132}{Componente di regime della risposta}
+
+\subsection{Condizioni iniziali ARMA che annullano il transitorio}
+Con lo stesso ragionamento del caso continuo, si cercano le condizioni iniziali sull'uscita
+tali che risposta libera $+$ transitoria sia identicamente nulla. Imponendo l'annullamento
+dei coefficienti del numeratore (comandi \texttt{Solve} e \texttt{CoefficientList}) si
+ottiene $y_0$, e da questo lo stato iniziale $x_0=\mathrm{Ob}^{-1}y_0$ con
+$y_0=\begin{bmatrix}\tfrac{125}{96}&\tfrac{125}{96}&-\tfrac{67}{96}\end{bmatrix}^{\!\top}$.

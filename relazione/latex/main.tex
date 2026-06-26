@@ -1,0 +1,58 @@
+% =====================================================================
+%  Relazione progetto di Fondamenti di Automatica - Traccia 28
+%  Bruni Christian, matricola 240008
+%
+%  Riscrittura in LaTeX della relazione originale. La prosa e la
+%  matematica sono ri-tipografate nativamente; i grafici e gli output
+%  simbolici di Mathematica/Simulink sono le immagini estratte dal PDF
+%  originale (cartella img/), non riproducibili senza i software.
+%
+%  Compilazione:  latexmk -pdf main.tex      (oppure pdflatex main.tex x2)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[font=small,labelformat=empty]{caption}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+
+\graphicspath{{img/}}
+
+% --- helper per le immagini estratte dal PDF originale ---
+% grafico/output Mathematica senza didascalia
+\newcommand{\mma}[2][0.7]{%
+  \begin{figure}[H]\centering\includegraphics[width=#1\linewidth]{#2}\end{figure}}
+% grafico con didascalia (riprende le didascalie della relazione originale)
+\newcommand{\mmacap}[3][0.7]{%
+  \begin{figure}[H]\centering\includegraphics[width=#1\linewidth]{#2}\caption*{\itshape #3}\end{figure}}
+
+\newcommand{\Lapl}{\mathcal{L}}
+\newcommand{\Ztr}{\mathcal{Z}}
+
+\title{\vspace{-1.5cm}\textbf{Relazione progetto\\Fondamenti di Automatica}}
+\author{Bruni Christian \quad--\quad matricola 240008\\[2pt]Traccia n\textordmasculine\ 28}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\vspace{1cm}
+\tableofcontents
+\newpage
+
+\input{sezioni/esercizio-a}
+\newpage
+\input{sezioni/esercizio-b}
+\newpage
+\input{sezioni/esercizio-c}
+
+\end{document}

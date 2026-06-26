@@ -1,0 +1,174 @@
+\section{Esercizio A -- Sistema LTI a tempo continuo}
+
+Un sistema dinamico $\Sigma=(T,X,U,Y,\mathcal{U},\mathcal{Y},\phi,\eta)$ è una
+collezione di insiemi, spazi e funzioni: $T$ è l'insieme dei tempi, $X$ lo spazio
+di stato, $U$ e $Y$ le immagini di ingresso e uscita, $\mathcal{U}$ e $\mathcal{Y}$
+gli insiemi delle funzioni di ingresso e di uscita ammissibili, $\phi$ la funzione
+di transizione di stato (forma esplicita del sistema) ed $\eta$ la mappa di uscita.
+
+Il sistema in esame è SISO (Single-Input Single-Output): ingresso e uscita sono
+scalari. È inoltre \emph{proprio}, poiché la matrice $D$ è identicamente nulla e
+quindi l'ingresso non influenza istantaneamente l'uscita. Le matrici sono:
+\[
+A=\begin{bmatrix}
+-\tfrac{179}{4} & -\tfrac{331}{4} & \tfrac{205}{8} & -\tfrac{409}{8}\\[2pt]
+\tfrac{183}{4} & \tfrac{327}{4} & -\tfrac{213}{8} & \tfrac{409}{8}\\[2pt]
+-\tfrac{179}{2} & -\tfrac{331}{2} & \tfrac{205}{4} & -\tfrac{413}{4}\\[2pt]
+-\tfrac{179}{2} & -\tfrac{327}{2} & \tfrac{209}{4} & -\tfrac{409}{4}
+\end{bmatrix},\quad
+B=\begin{bmatrix}-\tfrac12\\[2pt]\tfrac12\\[2pt]-1\\[2pt]-1\end{bmatrix},\quad
+C=\begin{bmatrix}-10 & 0 & 0 & 5\end{bmatrix}.
+\]
+
+\subsection{Modi naturali}
+I modi naturali sono funzioni reali di variabile reale che descrivono l'andamento
+della risposta libera; si presentano nella forma $e^{\lambda_i t}$, con $\lambda_i$
+l'$i$-esimo autovalore della matrice dinamica $A$. Gli autovalori sono
+\[
+\lambda_1=-7,\qquad \lambda_2=-3,\qquad \lambda_{3,4}=-2\pm\tfrac{j}{2}.
+\]
+Due reali e distinti, due complessi coniugati. Per ogni autovalore la molteplicità
+algebrica coincide con la geometrica, quindi $A$ è diagonalizzabile. I modi associati
+agli autovalori reali sono $e^{-7t}$ ed $e^{-3t}$; quelli legati alla coppia complessa
+hanno forma $e^{\sigma t}\cos(\omega t)$ ed $e^{\sigma t}\sin(\omega t)$ con
+$\sigma=\operatorname{Re}[\lambda]$ e $\omega=\operatorname{Im}[\lambda]$, cioè
+$e^{-2t}\cos\!\big(\tfrac{t}{2}\big)$ ed $e^{-2t}\sin\!\big(-\tfrac{t}{2}\big)$.
+
+\mmacap{img-003}{Andamento del 1\textordmasculine\ modo naturale}
+\mmacap{img-004}{Andamento del 2\textordmasculine\ modo naturale}
+\mmacap{img-005}{Andamento del 3\textordmasculine\ modo naturale}
+\mmacap{img-006}{Andamento del 4\textordmasculine\ modo naturale}
+
+\subsection{Risposta libera}
+La risposta libera si ottiene da uno stato iniziale assegnato $x_0$ con ingresso
+identicamente nullo, ed è una combinazione lineare dei modi naturali. Sullo stato vale
+$x_l(t)=e^{At}x_0$; conviene diagonalizzare $A$ tramite una matrice di cambiamento di
+base $T$ tale che $\Lambda=T^{-1}AT$, da cui $x_l(t)=T\,e^{\Lambda t}z_0$ con
+$z_0=T^{-1}x_0$.
+
+Per la coppia di autovalori complessi coniugati si costruisce una matrice $T$
+``ibrida'', usando parte reale e immaginaria di un autovettore: in questo modo $T$
+resta reale e $\Lambda$ assume la forma canonica reale con un blocco di Jordan
+$2\times2$.
+
+\mma[0.5]{img-013}
+
+Si proietta lo stato iniziale $x_0=\begin{bmatrix}-1&0&-3&0\end{bmatrix}^{\!\top}$ sulle
+colonne di $T$ ottenendo $z_0=T^{-1}x_0$; quindi la risposta libera sullo stato si
+calcola come $x_l(t)=T\,\mathrm{MatrixExp}[\Lambda t]\,z_0$ e quella sull'uscita come
+$y_l(t)=C\,x_l(t)$.
+
+\mmacap{img-016}{Risposta libera sull'uscita confrontata con quella sullo stato}
+
+\subsection{Configurazione degli stati iniziali}
+Poiché la risposta libera è combinazione lineare dei modi naturali, una scelta
+opportuna di $x_0$ può ``accendere'' o ``spegnere'' determinati modi. Scegliendo $x_0$
+come combinazione lineare delle sole colonne di $T$ associate ai modi che si vogliono
+evidenziare, le restanti componenti di $z_0$ si annullano e quei modi non compaiono.
+
+\mmacap{img-018}{Accensione dei modi legati alle prime due colonne di $T$}
+\mmacap{img-020}{Accensione dei modi legati alle ultime due colonne di $T$}
+\mmacap[0.48]{img-021}{Solo prima colonna}
+\mmacap[0.48]{img-022}{Solo seconda colonna}
+\mmacap[0.48]{img-023}{Solo terza colonna}
+\mmacap[0.48]{img-024}{Solo quarta colonna}
+
+\subsection{Funzione di trasferimento, poli e zeri}
+La funzione di trasferimento è la funzione di variabile complessa $G(s)$ tale che
+$Y(s)=G(s)U(s)$, calcolata come $G(s)=C(sI-A)^{-1}B+D$ (qui $D=0$). Normalizzando
+numeratore e denominatore rispetto al coefficiente di grado massimo si ottiene un
+denominatore
+\[
+d(s)=s^4+14s^3+\tfrac{261}{4}s^2+\tfrac{253}{2}s+\tfrac{357}{4}.
+\]
+
+\mma[0.65]{img-025}
+
+La correttezza si verifica con \texttt{StateSpaceModel}, che restituisce la forma di
+Rosenbrock del sistema. I \emph{poli} sono le radici del denominatore (sempre un
+sottoinsieme dei modi naturali); qui coincidono con gli autovalori:
+\[
+s=-7,\quad s=-3,\quad s=-2\pm\tfrac{j}{2}.
+\]
+Poiché i poli coincidono con gli autovalori, nella risposta forzata compaiono tutti i
+modi naturali. Gli \emph{zeri} sono le radici del numeratore.
+
+\subsection{Risposta al gradino unitario}
+La risposta forzata al gradino è $Y(s)=G(s)\,U(s)$ con $\Lapl[1(t)]=\tfrac1s$.
+Scomponendo $Y(s)$ in fratti semplici, la componente legata al polo $s=0$ è la
+\emph{risposta a regime}, mentre quelle legate ai poli del sistema costituiscono la
+\emph{risposta transitoria}. I residui si calcolano con la formula di Heaviside
+\[
+C_{ij}=\frac{1}{(v_i-j)!}\lim_{s\to p_i}\Big[(s-p_i)^{v_i}F(s)\Big].
+\]
+Per la coppia complessa è sufficiente calcolare $C_4$: $C_5=\overline{C_4}$.
+
+\mmacap[0.85]{img-036}{Risposta forzata al gradino con le componenti $y_{ss}(t)$ e $y_{tr}(t)$}
+
+\subsection{Risposta al segnale periodico elementare}
+Si considera $u(t)=A\sin(\omega t+\psi)\,1(t)$ con la terna $A=2,\ \omega=2,\ \psi=0$.
+Costruite $U(s)$ e $Y(s)$, si scompone in fratti semplici e, con la formula di
+Heaviside, si separano la componente di regime (legata all'ingresso) e quella
+transitoria (legata ai modi).
+
+\mmacap[0.7]{img-038}{Risposta forzata al segnale sinusoidale e sue componenti}
+
+Il sistema distorce il segnale in ampiezza e fase. Per quantificare i fattori di
+distorsione si usa la forma \emph{amplitude-phase} $X\sin(\omega t+\psi)$, eguagliata
+alla componente di regime nell'ipotesi di ingresso $\sin(t)\,1(t)$; dei fratti semplici
+interessano solo quelli legati all'ingresso.
+
+\mmacap[0.7]{img-050}{Confronto fra ingresso e componente di regime (forma amplitude-phase)}
+
+Risolvendo si trova $X<1$: il segnale è attenuato in ampiezza e mostra un anticipo di
+fase.
+
+\subsection{Modello ARMA equivalente e risposta alla rampa}
+Il modello ARMA (Auto-Regressive Moving Average) è una rappresentazione implicita
+ingresso/uscita, un'equazione differenziale della forma
+\[
+y^{(n)}+a_1y^{(n-1)}+\dots+a_ny=b_0u^{(n)}+b_1u^{(n-1)}+\dots+b_nu,
+\]
+ricavabile da $G(s)=\tfrac{Y(s)}{U(s)}$. Le condizioni iniziali sull'uscita compatibili
+con $x_0=\begin{bmatrix}-3&2&-3&3\end{bmatrix}^{\!\top}$ si ottengono dalla matrice di
+osservabilità: $[\,y(0)\ \dot y(0)\ \ddot y(0)\ \dddot y(0)\,]^{\top}=\mathrm{Ob}\,x_0$,
+con $\mathrm{Ob}=[\,C;\,CA;\,CA^2;\,CA^3\,]$. Per il sistema in esame:
+\[
+\dddot{\!\!\;y}^{\,(4)}+14\,\dddot y+\tfrac{261}{4}\ddot y+\tfrac{253}{2}\dot y+\tfrac{357}{4}y
+=5\,\dot u-5\,u.
+\]
+
+\mma[0.85]{img-052}
+
+Antitrasformando e confrontando la risposta libera ottenuta dal modello I/U con quella
+ricavata dalla definizione I/S/U si verifica che le due coincidono, a conferma della
+correttezza dei calcoli.
+
+\paragraph{Risposta alla rampa unitaria.}
+Con $\Lapl[t\,1(t)]=\tfrac{1}{s^2}$, si sostituiscono nel modello ARMA le condizioni
+iniziali e la trasformata dell'ingresso, separando la componente transitoria (risposta
+libera inclusa) da quella legata algebricamente all'ingresso:
+\[
+y_{ss}(t)=\frac{17260}{127449}-\frac{20\,t}{357}.
+\]
+
+\subsection{Stato iniziale che annulla il transitorio}
+Si cerca $x_0$ tale che la risposta al gradino coincida con il suo valore di regime
+(assenza di transitorio): occorre che la somma di risposta libera e risposta transitoria
+sia identicamente nulla. Imponendo l'annullamento del numeratore (polinomio di terzo
+grado nelle quattro incognite $x_i$) si ottiene
+\[
+x_0=\begin{bmatrix}\tfrac{2}{357}&-\tfrac{2}{357}&\tfrac{4}{357}&0\end{bmatrix}^{\!\top}.
+\]
+La verifica con \texttt{OutputResponse} applicato alla forma di Rosenbrock e il
+confronto con $\mathrm{FdT}[0]$ danno valori coincidenti.
+
+\subsection{Risposta al segnale $u(t)=1(-t)$}
+L'ingresso $1(-t)$ vale $1$ per $t<0$ e $0$ per $t\ge0$. Lo si interpreta come un segnale
+applicato in un passato remoto ($t\to-\infty$): la componente transitoria si è già
+estinta e per $t<0$ resta solo la componente di regime. Per $t\ge0$ l'ingresso è nullo e
+il sistema evolve liberamente a partire dalle condizioni all'istante $t=0$, ricavate da
+$x_0=\mathrm{Ob}^{-1}\cdot\text{(condizioni iniziali)}$. La risposta complessiva si
+descrive con un costrutto \texttt{Piecewise}.
+
+\mmacap[0.55]{img-080}{Risposta del sistema all'ingresso $u(t)=1(-t)$}

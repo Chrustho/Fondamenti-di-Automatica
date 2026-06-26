@@ -1,0 +1,19 @@
+# Cache di compilazione Simulink
+slprj/
+*.slxc
+
+# Autosave/backup MATLAB
+*.asv
+*.autosave
+*.m~
+
+# Artefatti di build LaTeX (il PDF e' rigenerabile con latexmk)
+relazione/latex/main.pdf
+relazione/latex/*.aux
+relazione/latex/*.log
+relazione/latex/*.out
+relazione/latex/*.toc
+relazione/latex/*.fls
+relazione/latex/*.fdb_latexmk
+relazione/latex/*.synctex.gz
+relazione/latex/sezioni/*.aux
